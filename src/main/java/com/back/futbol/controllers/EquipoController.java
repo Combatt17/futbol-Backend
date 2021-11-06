@@ -26,6 +26,7 @@ public class EquipoController {
     @Autowired
     EquipoService equipoService;
 
+
     @PostMapping("/equipos")
     public ResponseEntity<Map<String, String>> guardar(@Valid @RequestBody EquipoModel equipo,Errors error) {
         if(error.hasErrors()){
@@ -46,6 +47,37 @@ public class EquipoController {
     @GetMapping("/equipos/{id}")
     public EquipoModel buscarID(@PathVariable String id) {
        return this.equipoService.buscarPorId(id).get();
+    }
+
+    //Definimos el método HTTP y el path
+    @DeleteMapping("/equipos/{id}")
+    public ResponseEntity<Map<String, String>> eliminarPorId(@PathVariable String id) {
+        Boolean existe=this.equipoService.existById(id); //Variable existencia de objeto
+
+        Map<String, String> respuesta=new HashMap<>(); //Se crea la respuesta
+        if(!existe){ // Si no existe
+            respuesta.put("mensaje","No existe equipo por ese Id"); //Se asigna el valor de la respuesta
+            return ResponseEntity.ok(respuesta); // devuelve la respesta y No continua con el resto del método
+        }
+
+        equipoService.eliminarPorId(id); //Elimina el objeto
+        respuesta.put("mensaje","el equipo se eliminó correctamente");// Se agrega el mensaje de las respuesta
+        return ResponseEntity.ok(respuesta); //Se devuelve la respuesta de exito
+
+    }
+
+    //Método HTTP será PUT
+    @PutMapping("/equipos")
+    public ResponseEntity<Map<String,String>> actualizar(@RequestBody EquipoModel equipo, Errors error){
+        //Verificamos si ocurre un error
+        if(error.hasErrors()){
+            throwError(error); //Dirijimos el error al metodo de las excepciones
+        }
+        // Sino se guarda la actualización del equipo
+        equipoService.guardarEquipo(equipo);
+        Map<String,String> respuesta=new HashMap<>();
+        respuesta.put("mensaje","El equipo se actualizó correctamente");
+        return ResponseEntity.ok(respuesta);
     }
 
     private void throwError(Errors error) {
