@@ -6,9 +6,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.back.futbol.exceptions.CustomException;
-import com.back.futbol.models.UsuarioModel;
-import com.back.futbol.services.UsuarioService;
-import com.back.futbol.utils.BCrypt;
+import com.back.futbol.models.PartidoModel;
+import com.back.futbol.services.PartidoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class UsuarioController {
+public class PartidoController {
 
     @Autowired
-    UsuarioService usuarioService;
+    PartidoService service;
 
-    // Registrar usuario
-    @PostMapping("/usuarios")
-    public ResponseEntity<Map<String, String>> guardarUsuario(@Valid @RequestBody UsuarioModel usuario, Errors error) {
-        if (error.hasErrors()) {
-            throwError(error);
-        }
-        Map<String, String> respuesta = new HashMap<>();
-        usuario.setPassword(BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt()));
-        UsuarioModel u = this.usuarioService.buscarPorNombreUsuario(usuario.getUsername());
 
-        if (u.getId() == null) {
-            this.usuarioService.guardarUsuario(usuario);
-            respuesta.put("mensaje", "Se resgistro el usuario correctamente");
-        } else {
-            respuesta.put("mensaje", "El usuario ya se encuentra registrado");
+    @PostMapping("/partidos") 
+    public ResponseEntity<Map<String, String>> guardar(@Valid @RequestBody PartidoModel partido, Errors error){
+        if(error.hasErrors()){
+               throwError(error);
         }
+
+        this.service.registrarPartido(partido);
+        Map<String, String> respuesta= new HashMap<>();
+        respuesta.put("mensaje", "Se agregó correctamente el partido");
         return ResponseEntity.ok(respuesta);
     }
 
@@ -56,4 +49,6 @@ public class UsuarioController {
         }
         throw new CustomException(message);
     }
+
+    
 }
