@@ -33,7 +33,9 @@ public class UsuarioController {
             throwError(error);
         }
         Map<String, String> respuesta = new HashMap<>();
+       //Contraseña sin cifrar 123456
         usuario.setPassword(BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt()));
+       //Contraseña cifrada asfdffdgfghbvnhkhjkjh
         UsuarioModel u = this.usuarioService.buscarPorNombreUsuario(usuario.getUsername());
 
         if (u.getId() == null) {

@@ -21,4 +21,6 @@ public class PartidoService {
     public List<PartidoModel> traerPartidos(){
         return this.partidoRepository.findAll();
     }
+
+    
 }

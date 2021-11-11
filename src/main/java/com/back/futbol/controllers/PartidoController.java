@@ -1,6 +1,7 @@
 package com.back.futbol.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +40,24 @@ public class PartidoController {
         respuesta.put("mensaje", "Se agregó correctamente el partido");
         return ResponseEntity.ok(respuesta);
     }
+
+    @GetMapping("/partidos")
+    public List<PartidoModel> traerPartidos(){
+        return this.service.traerPartidos();
+    }
+
+    @PutMapping("/partidos")
+    public ResponseEntity<Map<String, String>> actualizar(@RequestBody PartidoModel partido, Errors error){
+         if(error.hasErrors()){
+             throwError(error);
+         }
+
+        this.service.registrarPartido(partido);
+        Map<String, String> respuesta= new HashMap<>();
+        respuesta.put("mensaje", "Se actualizó correctamente");
+        return ResponseEntity.ok(respuesta);
+    }
+    
 
     private void throwError(Errors error) {
         String message = "";
