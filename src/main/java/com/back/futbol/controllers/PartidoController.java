@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,11 @@ public class PartidoController {
     @GetMapping("/partidos")
     public List<PartidoModel> traerPartidos(){
         return this.service.traerPartidos();
+    }
+
+    @GetMapping("/partidos/local/{id}")
+    public int cantidadGolesLocal(@PathVariable String id){
+        return this.service.contarPartidosJugadosLocal(id);
     }
 
     @PutMapping("/partidos")
