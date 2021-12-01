@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class PartidoController {
 
@@ -30,7 +32,7 @@ public class PartidoController {
     PartidoService service;
 
 
-    @PostMapping("/partidos") 
+    @PostMapping("/partidos/registrar") 
     public ResponseEntity<Map<String, String>> guardar(@Valid @RequestBody PartidoModel partido, Errors error){
         if(error.hasErrors()){
                throwError(error);
